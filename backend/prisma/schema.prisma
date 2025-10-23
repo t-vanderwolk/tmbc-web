@@ -1,0 +1,35 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  MEMBER
+}
+
+model Profile {
+  id          String       @id @default(cuid())
+  email       String       @unique
+  password    String
+  name        String?
+  role        Role         @default(MEMBER)
+  inviteCode  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  inviteCodes InviteCode[] @relation("ProfileToInviteCode")
+}
+
+model InviteCode {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  used        Boolean  @default(false)
+  createdById String
+  createdBy   Profile  @relation("ProfileToInviteCode", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+}
