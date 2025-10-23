@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = require("../controllers/adminController");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const roleMiddleware_1 = require("../middleware/roleMiddleware");
+const router = (0, express_1.Router)();
+router.use(authMiddleware_1.authMiddleware, (0, roleMiddleware_1.requireRole)('ADMIN'));
+router.get('/users', adminController_1.listUsers);
+router.post('/promote/:id', adminController_1.promoteToMentor);
+exports.default = router;

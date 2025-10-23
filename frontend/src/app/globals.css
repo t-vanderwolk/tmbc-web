@@ -11,6 +11,10 @@
   --font-script: var(--font-great-vibes);
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background: var(--color-ivory);

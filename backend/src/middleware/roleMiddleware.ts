@@ -1,14 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-import type { Role } from '../types/roles';
+type Role = 'ADMIN' | 'MENTOR' | 'MEMBER';
 
-export const authorizeRoles = (...allowedRoles: Role[]) => {
+export const requireRole = (role: Role) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    if (!allowedRoles.includes(req.user.role)) {
+    if (req.user.role !== role) {
       return res.status(403).json({ message: 'Forbidden' });
     }
 

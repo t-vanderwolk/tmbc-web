@@ -1,51 +1,24 @@
+"use client";
+
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
-
+// ✅ Create an axios instance pointing to your backend
 const api = axios.create({
-  baseURL,
-  withCredentials: true,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+  withCredentials: true, // so cookies (JWT/session) are sent automatically
 });
-
-const getTokenFromCookies = () => {
-  if (typeof document === "undefined") {
-    return undefined;
-  }
-
-  return document.cookie
-    .split(";")
-    .map((pair) => pair.trim())
-    .find((pair) => pair.startsWith("token="))
-    ?.split("=")[1];
-};
-
-api.interceptors.request.use((config) => {
-  const token = getTokenFromCookies();
-
-  if (token) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${decodeURIComponent(token)}`,
-    };
-  }
-
-  return config;
-});
-
-export const setAuthToken = (token: string) => {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  document.cookie = `token=${encodeURIComponent(token)}; path=/; max-age=${7 * 24 * 60 * 60}`;
-};
-
-export const clearAuthToken = () => {
-  if (typeof document === "undefined") {
-    return;
-  }
-
-  document.cookie = "token=; path=/; max-age=0";
-};
 
 export default api;
+
+// ✅ Add helpers for managing role cookies (used by useAuth)
+export function setRoleCookie(role: string) {
+  if (typeof document !== "undefined") {
+    document.cookie = `role=${role}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+  }
+}
+
+export function clearRoleCookie() {
+  if (typeof document !== "undefined") {
+    document.cookie = "role=; Max-Age=0; path=/; SameSite=Lax";
+  }
+}

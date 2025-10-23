@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin")) {
     if (!role || !adminOnly.has(role)) {
       const url = request.nextUrl.clone();
-      url.pathname = "/auth";
+      url.pathname = "/login";
       return NextResponse.redirect(url);
     }
   }
@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith("/mentor")) {
     if (!role || !mentorAccess.has(role)) {
       const url = request.nextUrl.clone();
-      url.pathname = "/auth";
+      url.pathname = "/login";
       return NextResponse.redirect(url);
     }
   }

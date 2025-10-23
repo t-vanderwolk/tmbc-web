@@ -5,20 +5,24 @@ import {
   Playfair_Display as PlayfairDisplay,
 } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "./components/Navbar";
 
 const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
 });
 
 const playfair = PlayfairDisplay({
   variable: "--font-playfair",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 const greatVibes = GreatVibes({
   variable: "--font-great-vibes",
   subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -32,11 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${nunito.variable} ${playfair.variable} ${greatVibes.variable} antialiased bg-ivory text-charcoal`}
-      >
-        {children}
+    <html lang="en" className={`${nunito.variable} ${playfair.variable} ${greatVibes.variable}`}>
+      <body className="bg-ivory text-charcoal antialiased">
+        <Navbar />
+        <main className="mx-auto min-h-[calc(100vh-80px)] max-w-6xl px-6 py-10">{children}</main>
       </body>
     </html>
   );
